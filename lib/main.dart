@@ -2,7 +2,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
 import 'signup_screen.dart';
+import 'home_screen.dart';
 import 'firebase_options.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,10 +24,19 @@ class MyApp extends StatelessWidget {
       title: 'Pet Care App',
       initialRoute: '/',
       routes: {
-        '/': (context) => LoginScreen(),
+        '/': (context) => _getInitialScreen(),
         '/signup': (context) => SignUpScreen(),
-        '/home': (context) => Scaffold(appBar: AppBar(title: Text('Home Screen'))),
+        '/home': (context) => HomeScreen(),
       },
     );
+  }
+
+  Widget _getInitialScreen() {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      return HomeScreen();
+    } else {
+      return LoginScreen(); 
+    }
   }
 }
