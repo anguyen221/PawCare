@@ -4,6 +4,7 @@ import 'login_screen.dart';
 import 'signup_screen.dart';
 import 'home_screen.dart';
 import 'add_pet_screen.dart';
+import 'pet_details_screen.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -28,7 +29,8 @@ class MyApp extends StatelessWidget {
         '/': (context) => _getInitialScreen(),
         '/signup': (context) => SignUpScreen(),
         '/home': (context) => HomeScreen(),
-        '/addPet': (context) => AddPetScreen(), 
+        '/addPet': (context) => AddPetScreen(),
+        '/petDetail': (context) => PetDetailScreen(),
       },
     );
   }
