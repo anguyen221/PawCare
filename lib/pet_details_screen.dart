@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'care_tips_screen.dart';
 
 class PetDetailScreen extends StatelessWidget {
   const PetDetailScreen({super.key});
@@ -37,7 +38,6 @@ class PetDetailScreen extends StatelessWidget {
           final petData = snapshot.data!;
           final petName = petData['name'];
           final petType = petData['type'];
-          final petCreatedAt = petData['createdAt'].toDate();
           final petFeedingSchedule = List<String>.from(petData['feedingSchedule'] ?? []);
 
           return Padding(
@@ -54,11 +54,6 @@ class PetDetailScreen extends StatelessWidget {
                   'Pet Type: $petType',
                   style: TextStyle(fontSize: 20),
                 ),
-                SizedBox(height: 8),
-                Text(
-                  'Added on: ${petCreatedAt.toLocal()}',
-                  style: TextStyle(fontSize: 16),
-                ),
                 SizedBox(height: 20),
                 Text(
                   'Feeding Schedule:',
@@ -70,6 +65,18 @@ class PetDetailScreen extends StatelessWidget {
                     style: TextStyle(fontSize: 16),
                   );
                 }),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CareTipsScreen(petType: petType),
+                      ),
+                    );
+                  },
+                  child: Text('View Care Tips'),
+                ),
               ],
             ),
           );
