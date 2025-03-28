@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'login_screen.dart';
 import 'signup_screen.dart';
 import 'home_screen.dart';
+import 'add_pet_screen.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -11,7 +12,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  
+
   runApp(const MyApp());
 }
 
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => _getInitialScreen(),
         '/signup': (context) => SignUpScreen(),
         '/home': (context) => HomeScreen(),
+        '/addPet': (context) => AddPetScreen(), 
       },
     );
   }
