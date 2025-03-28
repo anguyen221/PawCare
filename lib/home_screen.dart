@@ -71,10 +71,18 @@ class HomeScreen extends StatelessWidget {
                       final pet = pets[index];
                       final petName = pet['name'];
                       final petType = pet['type'];
+                      final petId = pet.id;
 
                       return ListTile(
                         title: Text(petName),
                         subtitle: Text(petType),
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            '/petDetail',
+                            arguments: petId, 
+                          );
+                        },
                       );
                     },
                   );
