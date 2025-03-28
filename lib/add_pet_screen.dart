@@ -14,9 +14,11 @@ class AddPetScreen extends StatefulWidget {
 class _AddPetScreenState extends State<AddPetScreen> {
   final _petNameController = TextEditingController();
   String? _selectedPetType;
+  final _feedingTimeController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   final List<String> petTypes = ['Bunny', 'Hamster', 'Dog', 'Cat'];
+  final List<String> feedingTimes = [];
 
   Future<void> _addPet() async {
     if (_formKey.currentState?.validate() ?? false) {
@@ -32,6 +34,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
         await petRef.set({
           'name': _petNameController.text,
           'type': _selectedPetType,
+          'feedingSchedule': feedingTimes, 
           'createdAt': FieldValue.serverTimestamp(),
         });
 
@@ -39,6 +42,15 @@ class _AddPetScreenState extends State<AddPetScreen> {
 
         Navigator.pop(context);
       }
+    }
+  }
+
+  void _addFeedingTime() {
+    if (_feedingTimeController.text.isNotEmpty) {
+      setState(() {
+        feedingTimes.add(_feedingTimeController.text);
+        _feedingTimeController.clear();
+      });
     }
   }
 
@@ -85,9 +97,34 @@ class _AddPetScreenState extends State<AddPetScreen> {
                 },
               ),
               SizedBox(height: 20),
+              TextFormField(
+                controller: _feedingTimeController,
+                decoration: InputDecoration(labelText: 'Feeding Time (e.g., 8:00 AM)'),
+              ),
+              SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: _addFeedingTime,
+                child: Text('Add Feeding Time'),
+              ),
+              SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _addPet,
                 child: Text('Add Pet'),
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Feeding Times:',
+                style: TextStyle(fontSize: 18),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: feedingTimes.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(feedingTimes[index]),
+                    );
+                  },
+                ),
               ),
             ],
           ),

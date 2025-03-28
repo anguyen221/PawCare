@@ -10,8 +10,8 @@ class PetDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final petId = ModalRoute.of(context)?.settings.arguments as String;
-    final userId = FirebaseAuth.instance.currentUser?.uid; 
-    
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+
     return Scaffold(
       appBar: AppBar(title: Text('Pet Details')),
       body: FutureBuilder<DocumentSnapshot>(
@@ -38,6 +38,7 @@ class PetDetailScreen extends StatelessWidget {
           final petName = petData['name'];
           final petType = petData['type'];
           final petCreatedAt = petData['createdAt'].toDate();
+          final petFeedingSchedule = List<String>.from(petData['feedingSchedule'] ?? []);
 
           return Padding(
             padding: const EdgeInsets.all(16.0),
@@ -58,6 +59,17 @@ class PetDetailScreen extends StatelessWidget {
                   'Added on: ${petCreatedAt.toLocal()}',
                   style: TextStyle(fontSize: 16),
                 ),
+                SizedBox(height: 20),
+                Text(
+                  'Feeding Schedule:',
+                  style: TextStyle(fontSize: 18),
+                ),
+                ...petFeedingSchedule.map((time) {
+                  return Text(
+                    time,
+                    style: TextStyle(fontSize: 16),
+                  );
+                }),
               ],
             ),
           );
