@@ -1,6 +1,7 @@
-// ignore_for_file: use_build_context_synchronously, avoid_print, library_private_types_in_public_api
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -36,13 +37,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Future<void> _signUp() async {
     if (_formKey.currentState?.validate() ?? false) {
       try {
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: _emailController.text,
           password: _passwordController.text,
         );
+        
+        String userId = userCredential.user!.uid;
+        await FirebaseFirestore.instance.collection('users').doc(userId).set({
+          'email': _emailController.text,
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+
         Navigator.pushReplacementNamed(context, '/home');
       } catch (e) {
-        print('Error signing up: $e');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Sign-up failed: $e')),
         );
