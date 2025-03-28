@@ -13,8 +13,10 @@ class AddPetScreen extends StatefulWidget {
 
 class _AddPetScreenState extends State<AddPetScreen> {
   final _petNameController = TextEditingController();
-  final _petTypeController = TextEditingController();
+  String? _selectedPetType;
   final _formKey = GlobalKey<FormState>();
+
+  final List<String> petTypes = ['Bunny', 'Hamster', 'Dog', 'Cat'];
 
   Future<void> _addPet() async {
     if (_formKey.currentState?.validate() ?? false) {
@@ -29,7 +31,7 @@ class _AddPetScreenState extends State<AddPetScreen> {
 
         await petRef.set({
           'name': _petNameController.text,
-          'type': _petTypeController.text,
+          'type': _selectedPetType,
           'createdAt': FieldValue.serverTimestamp(),
         });
 
@@ -60,12 +62,24 @@ class _AddPetScreenState extends State<AddPetScreen> {
                   return null;
                 },
               ),
-              TextFormField(
-                controller: _petTypeController,
+              SizedBox(height: 20),
+              DropdownButtonFormField<String>(
+                value: _selectedPetType,
                 decoration: InputDecoration(labelText: 'Pet Type'),
+                items: petTypes.map((petType) {
+                  return DropdownMenuItem<String>(
+                    value: petType,
+                    child: Text(petType),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _selectedPetType = value;
+                  });
+                },
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a pet type';
+                  if (value == null) {
+                    return 'Please select a pet type';
                   }
                   return null;
                 },
