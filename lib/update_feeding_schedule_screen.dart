@@ -2,18 +2,35 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class UpdateFeedingScheduleScreen extends StatefulWidget {
-  final String petId;
-
-  const UpdateFeedingScheduleScreen({super.key, required this.petId});
-
-  @override
-  _UpdateFeedingScheduleScreenState createState() => _UpdateFeedingScheduleScreenState();
-}
-
 class _UpdateFeedingScheduleScreenState extends State<UpdateFeedingScheduleScreen> {
   final _feedingTimeController = TextEditingController();
-  final List<String> feedingTimes = [];
+  List<String> feedingTimes = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadFeedingTimes();
+  }
+
+  Future<void> _loadFeedingTimes() async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+
+    if (userId != null) {
+      final petRef = FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('pets')
+          .doc(widget.petId);
+
+      final snapshot = await petRef.get();
+      if (snapshot.exists && snapshot.data() != null) {
+        final data = snapshot.data()!;
+        setState(() {
+          feedingTimes = List<String>.from(data['feedingSchedule'] ?? []);
+        });
+      }
+    }
+  }
 
   Future<void> _updateFeedingSchedule() async {
     final userId = FirebaseAuth.instance.currentUser?.uid;
@@ -30,7 +47,6 @@ class _UpdateFeedingScheduleScreenState extends State<UpdateFeedingScheduleScree
       });
 
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Feeding Schedule Updated!')));
-
       Navigator.pop(context);
     }
   }
@@ -42,6 +58,12 @@ class _UpdateFeedingScheduleScreenState extends State<UpdateFeedingScheduleScree
         _feedingTimeController.clear();
       });
     }
+  }
+
+  void _removeFeedingTime(int index) {
+    setState(() {
+      feedingTimes.removeAt(index);
+    });
   }
 
   @override
@@ -77,6 +99,13 @@ class _UpdateFeedingScheduleScreenState extends State<UpdateFeedingScheduleScree
                 itemBuilder: (context, index) {
                   return ListTile(
                     title: Text(feedingTimes[index]),
+                    trailing: IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () {
+                        _removeFeedingTime(index);
+                        _updateFeedingSchedule();
+                      },
+                    ),
                   );
                 },
               ),
