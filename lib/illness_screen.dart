@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class IllnessScreen extends StatefulWidget {
   final String? petType;
 
-  const IllnessScreen({Key? key, this.petType}) : super(key: key);
+  const IllnessScreen({super.key, this.petType});
 
   @override
   _IllnessScreenState createState() => _IllnessScreenState();
