@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         '/signup': (context) => SignUpScreen(),
         '/home': (context) => HomeScreen(),
         '/addPet': (context) => AddPetScreen(),
-        '/petDetail': (context) => PetDetailsScreen(),
+        '/petDetail': (context) => PetDetailScreen(),
         '/illnessSymptoms': (context) => IllnessScreen(),
       },
     );
