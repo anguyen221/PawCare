@@ -26,13 +26,21 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Pet Care App',
       initialRoute: '/',
+      onGenerateRoute: (settings) {
+        if (settings.name == '/illnessSymptoms') {
+          final petType = settings.arguments as String;
+          return MaterialPageRoute(
+            builder: (context) => IllnessScreen(petType: petType),
+          );
+        }
+        return null;
+      },
       routes: {
         '/': (context) => _getInitialScreen(),
         '/signup': (context) => SignUpScreen(),
         '/home': (context) => HomeScreen(),
         '/addPet': (context) => AddPetScreen(),
         '/petDetail': (context) => PetDetailScreen(),
-        '/illnessSymptoms': (context) => IllnessScreen(),
       },
     );
   }
