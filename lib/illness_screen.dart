@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class IllnessSymptomsPage extends StatefulWidget {
+class IllnessScreen extends StatefulWidget {  // Rename here
   @override
-  _IllnessSymptomsPageState createState() => _IllnessSymptomsPageState();
+  _IllnessScreenState createState() => _IllnessScreenState();  // Rename here
 }
 
-class _IllnessSymptomsPageState extends State<IllnessSymptomsPage> {
+class _IllnessScreenState extends State<IllnessScreen> {  // Rename here
   String? selectedPet;
   final Map<String, List<Map<String, String>>> petIllnesses = {
     'Bunny': [],
