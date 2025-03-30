@@ -1,71 +1,92 @@
 import 'package:flutter/material.dart';
 
-class IllnessScreen extends StatefulWidget {  // Rename here
-  @override
-  _IllnessScreenState createState() => _IllnessScreenState();  // Rename here
-}
+class IllnessScreen extends StatelessWidget {
+  final String petType;
 
-class _IllnessScreenState extends State<IllnessScreen> {  // Rename here
-  String? selectedPet;
-  final Map<String, List<Map<String, String>>> petIllnesses = {
-    'Bunny': [],
-    'Hamster': [],
-    'Dog': [],
-    'Cat': [],
-  };
+  const IllnessScreen({super.key, required this.petType});
 
   @override
   Widget build(BuildContext context) {
+    Map<String, Map<String, String>> illnessInfo = {
+      'bunny': {
+        'symptom1': 'Lethargy',
+        'symptom2': 'Loss of appetite',
+        'symptom3': 'Diarrhea',
+        'cause': 'Could be due to digestive issues or stress.',
+        'treatment': 'Consult a vet for proper diagnosis and treatment.',
+      },
+      'hamster': {
+        'symptom1': 'Hair loss',
+        'symptom2': 'Wet tail',
+        'symptom3': 'Loss of appetite',
+        'cause': 'Wet tail is usually caused by stress or bacterial infection.',
+        'treatment': 'Ensure a clean environment and consult a vet for medication.',
+      },
+      'cat': {
+        'symptom1': 'Vomiting',
+        'symptom2': 'Loss of appetite',
+        'symptom3': 'Lethargy',
+        'cause': 'Could be due to a variety of issues, including hairballs or infections.',
+        'treatment': 'Keep the cat hydrated and take it to a vet for further diagnosis.',
+      },
+      'dog': {
+        'symptom1': 'Excessive scratching',
+        'symptom2': 'Vomiting',
+        'symptom3': 'Lethargy',
+        'cause': 'Could be allergies, infections, or parasites.',
+        'treatment': 'Check for fleas and consult a vet for a proper treatment plan.',
+      },
+    };
+
     return Scaffold(
-      appBar: AppBar(title: Text('Illness Symptoms')),
+      appBar: AppBar(title: Text('Illness Symptoms for $petType')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            DropdownButton<String>(
-              value: selectedPet,
-              hint: Text('Select a pet'),
-              isExpanded: true,
-              items: petIllnesses.keys.map((String pet) {
-                return DropdownMenuItem<String>(
-                  value: pet,
-                  child: Text(pet),
-                );
-              }).toList(),
-              onChanged: (String? newValue) {
-                setState(() {
-                  selectedPet = newValue;
-                });
-              },
+            Text(
+              'Common Symptoms for $petType:',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 20),
-            selectedPet == null
-                ? Text('Select a pet to view illnesses')
-                : Expanded(
-                    child: ListView(
-                      children: petIllnesses[selectedPet]!
-                          .map((illness) => ExpansionTile(
-                                title: Text(illness['symptom'] ?? 'Unknown'),
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text('Cause: ${illness['cause']}'),
-                                        SizedBox(height: 5),
-                                        Text(
-                                            'Treatment: ${illness['treatment']}'),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ))
-                          .toList(),
-                    ),
-                  ),
+            if (illnessInfo[petType] != null) ...[
+              Text(
+                '1. ${illnessInfo[petType]!['symptom1']}',
+                style: TextStyle(fontSize: 18),
+              ),
+              Text(
+                '2. ${illnessInfo[petType]!['symptom2']}',
+                style: TextStyle(fontSize: 18),
+              ),
+              Text(
+                '3. ${illnessInfo[petType]!['symptom3']}',
+                style: TextStyle(fontSize: 18),
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Possible Cause:',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                illnessInfo[petType]!['cause']!,
+                style: TextStyle(fontSize: 16),
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Recommended Treatment:',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                illnessInfo[petType]!['treatment']!,
+                style: TextStyle(fontSize: 16),
+              ),
+            ] else ...[
+              Text(
+                'No illness data available for this pet type.',
+                style: TextStyle(fontSize: 18),
+              ),
+            ],
           ],
         ),
       ),
