@@ -59,90 +59,73 @@ class _RemindersScreenState extends State<RemindersScreen> {
         'time': _selectedTime!.format(context),
         'createdAt': FieldValue.serverTimestamp(),
       });
-      _reminderController.clear();
-      setState(() {
-        _selectedDate = null;
-        _selectedTime = null;
-      });
-    }
-  }
-
-  Future<void> _deleteReminder(String reminderId) async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.uid)
-          .collection('reminders')
-          .doc(reminderId)
-          .delete();
+      Navigator.pop(context);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
-
     return Scaffold(
-      appBar: AppBar(title: Text('Reminders')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _reminderController,
-              decoration: InputDecoration(labelText: 'Reminder Text'),
-            ),
-            SizedBox(height: 10),
-            ElevatedButton(onPressed: _pickDate, child: Text('Select Date')),
-            Text(_selectedDate != null ? _selectedDate!.toLocal().toString().split(' ')[0] : 'No date selected'),
-            SizedBox(height: 10),
-            ElevatedButton(onPressed: _pickTime, child: Text('Select Time')),
-            Text(_selectedTime != null ? _selectedTime!.format(context) : 'No time selected'),
-            SizedBox(height: 20),
-            ElevatedButton(onPressed: _saveReminder, child: Text('Save Reminder')),
-            SizedBox(height: 20),
-            Expanded(
-              child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('users')
-                    .doc(user?.uid)
-                    .collection('reminders')
-                    .orderBy('createdAt', descending: true)
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
-                  }
-
-                  if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  }
-
-                  final reminders = snapshot.data?.docs ?? [];
-
-                  if (reminders.isEmpty) {
-                    return Center(child: Text('No reminders set.'));
-                  }
-
-                  return ListView.builder(
-                    itemCount: reminders.length,
-                    itemBuilder: (context, index) {
-                      final reminder = reminders[index];
-                      return ListTile(
-                        title: Text(reminder['text']),
-                        subtitle: Text('${reminder['date']} at ${reminder['time']}'),
-                        trailing: IconButton(
-                          icon: Icon(Icons.delete, color: Colors.red),
-                          onPressed: () => _deleteReminder(reminder.id),
-                        ),
-                      );
-                    },
-                  );
-                },
+      appBar: AppBar(
+        title: Text('Set a Reminder', style: TextStyle(fontFamily: 'Fredoka')),
+        backgroundColor: Colors.pink.shade200,
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.pink.shade50, Colors.purple.shade50],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              TextField(
+                controller: _reminderController,
+                decoration: InputDecoration(
+                  labelText: 'Reminder Text',
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                ),
               ),
-            ),
-          ],
+              SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: _pickDate,
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  backgroundColor: Colors.pink.shade300,
+                ),
+                child: Text('📅 Select Date'),
+              ),
+              Text(
+                _selectedDate != null ? _selectedDate!.toLocal().toString().split(' ')[0] : 'No date selected',
+                style: TextStyle(fontFamily: 'Fredoka'),
+              ),
+              SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: _pickTime,
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  backgroundColor: Colors.purple.shade300,
+                ),
+                child: Text('⏰ Select Time'),
+              ),
+              Text(
+                _selectedTime != null ? _selectedTime!.format(context) : 'No time selected',
+                style: TextStyle(fontFamily: 'Fredoka'),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _saveReminder,
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  backgroundColor: Colors.blue.shade300,
+                ),
+                child: Text('✅ Save Reminder'),
+              ),
+            ],
+          ),
         ),
       ),
     );
