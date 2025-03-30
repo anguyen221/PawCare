@@ -59,14 +59,32 @@ class _RemindersScreenState extends State<RemindersScreen> {
         'time': _selectedTime!.format(context),
         'createdAt': FieldValue.serverTimestamp(),
       });
-      Navigator.pop(context);
+      _reminderController.clear();
+      setState(() {
+        _selectedDate = null;
+        _selectedTime = null;
+      });
+    }
+  }
+
+  Future<void> _deleteReminder(String reminderId) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('reminders')
+          .doc(reminderId)
+          .delete();
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+
     return Scaffold(
-      appBar: AppBar(title: Text('Set a Reminder')),
+      appBar: AppBar(title: Text('Reminders')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -83,6 +101,47 @@ class _RemindersScreenState extends State<RemindersScreen> {
             Text(_selectedTime != null ? _selectedTime!.format(context) : 'No time selected'),
             SizedBox(height: 20),
             ElevatedButton(onPressed: _saveReminder, child: Text('Save Reminder')),
+            SizedBox(height: 20),
+            Expanded(
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(user?.uid)
+                    .collection('reminders')
+                    .orderBy('createdAt', descending: true)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+
+                  if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  }
+
+                  final reminders = snapshot.data?.docs ?? [];
+
+                  if (reminders.isEmpty) {
+                    return Center(child: Text('No reminders set.'));
+                  }
+
+                  return ListView.builder(
+                    itemCount: reminders.length,
+                    itemBuilder: (context, index) {
+                      final reminder = reminders[index];
+                      return ListTile(
+                        title: Text(reminder['text']),
+                        subtitle: Text('${reminder['date']} at ${reminder['time']}'),
+                        trailing: IconButton(
+                          icon: Icon(Icons.delete, color: Colors.red),
+                          onPressed: () => _deleteReminder(reminder.id),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),
