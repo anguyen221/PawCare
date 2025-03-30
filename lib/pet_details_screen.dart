@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'care_tips_screen.dart';
+import 'update_feeding_schedule_screen.dart';
 
 class PetDetailScreen extends StatelessWidget {
   const PetDetailScreen({super.key});
@@ -65,6 +66,18 @@ class PetDetailScreen extends StatelessWidget {
                     style: TextStyle(fontSize: 16),
                   );
                 }),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => UpdateFeedingScheduleScreen(petId: petId),
+                      ),
+                    );
+                  },
+                  child: Text('Update Feeding Schedule'),
+                ),
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
