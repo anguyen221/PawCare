@@ -43,6 +43,15 @@ class HomeScreen extends StatelessWidget {
             
             SizedBox(height: 20),
 
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/illnessSymptoms');
+              },
+              child: Text('Illness Symptoms'),
+            ),
+
+            SizedBox(height: 20),
+
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
