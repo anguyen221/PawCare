@@ -56,7 +56,9 @@ class _UpdateFeedingScheduleScreenState extends State<UpdateFeedingScheduleScree
         'feedingSchedule': feedingTimes,
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Feeding Schedule Updated!')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Feeding Schedule Updated! ✅')),
+      );
       Navigator.pop(context);
     }
   }
@@ -79,48 +81,106 @@ class _UpdateFeedingScheduleScreenState extends State<UpdateFeedingScheduleScree
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Update Feeding Schedule')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextFormField(
-              controller: _feedingTimeController,
-              decoration: InputDecoration(labelText: 'Feeding Time (e.g., 8:00 AM)'),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.pink.shade100, Colors.grey.shade300],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          image: DecorationImage(
+            image: AssetImage('assets/paw_prints.jpg'),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+              Colors.white.withOpacity(0.2),
+              BlendMode.dstATop,
             ),
-            SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: _addFeedingTime,
-              child: Text('Add Feeding Time'),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _updateFeedingSchedule,
-              child: Text('Save Feeding Schedule'),
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Feeding Times:',
-              style: TextStyle(fontSize: 18),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: feedingTimes.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(feedingTimes[index]),
-                    trailing: IconButton(
-                      icon: Icon(Icons.delete),
-                      onPressed: () {
-                        _removeFeedingTime(index);
-                        _updateFeedingSchedule();
-                      },
-                    ),
-                  );
-                },
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              SizedBox(height: 50),
+              Text(
+                'Update Feeding Schedule 🐾',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Fredoka',
+                ),
               ),
-            ),
-          ],
+              SizedBox(height: 20),
+              TextFormField(
+                controller: _feedingTimeController,
+                decoration: InputDecoration(
+                  labelText: 'Feeding Time (e.g., 8:00 AM)',
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+              SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: _addFeedingTime,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.pink.shade300,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Text('➕ Add Feeding Time'),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _updateFeedingSchedule,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green.shade400,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Text('💾 Save Feeding Schedule'),
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Feeding Times:',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Fredoka',
+                ),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: feedingTimes.length,
+                  itemBuilder: (context, index) {
+                    return Card(
+                      color: Colors.pink.shade100,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: ListTile(
+                        title: Text(
+                          feedingTimes[index],
+                          style: TextStyle(fontFamily: 'Fredoka'),
+                        ),
+                        trailing: IconButton(
+                          icon: Icon(Icons.delete, color: Colors.grey.shade300),
+                          onPressed: () {
+                            _removeFeedingTime(index);
+                            _updateFeedingSchedule();
+                          },
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
