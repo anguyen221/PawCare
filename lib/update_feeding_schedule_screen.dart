@@ -2,6 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+class UpdateFeedingScheduleScreen extends StatefulWidget {
+  final String petId;
+
+  const UpdateFeedingScheduleScreen({super.key, required this.petId});
+
+  @override
+  _UpdateFeedingScheduleScreenState createState() =>
+      _UpdateFeedingScheduleScreenState();
+}
+
 class _UpdateFeedingScheduleScreenState extends State<UpdateFeedingScheduleScreen> {
   final _feedingTimeController = TextEditingController();
   List<String> feedingTimes = [];
