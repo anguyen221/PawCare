@@ -43,11 +43,23 @@ class HomeScreen extends StatelessWidget {
             
             SizedBox(height: 20),
 
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/illnessSymptoms');
+            DropdownButton<String>(
+              hint: Text('Select Pet for Illness Symptoms'),
+              items: ['Bunny', 'Hamster', 'Dog', 'Cat'].map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+              onChanged: (String? selectedPetType) {
+                if (selectedPetType != null) {
+                  Navigator.pushNamed(
+                    context,
+                    '/illnessSymptoms',
+                    arguments: selectedPetType,
+                  );
+                }
               },
-              child: Text('Illness Symptoms'),
             ),
 
             SizedBox(height: 20),
