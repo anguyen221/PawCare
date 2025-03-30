@@ -43,23 +43,11 @@ class HomeScreen extends StatelessWidget {
             
             SizedBox(height: 20),
 
-            DropdownButton<String>(
-              hint: Text('Select Pet for Illness Symptoms'),
-              items: ['Bunny', 'Hamster', 'Dog', 'Cat'].map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: (String? selectedPetType) {
-                if (selectedPetType != null) {
-                  Navigator.pushNamed(
-                    context,
-                    '/illnessSymptoms',
-                    arguments: selectedPetType,
-                  );
-                }
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/illnessSymptoms');
               },
+              child: Text('Illness Symptoms'),
             ),
 
             SizedBox(height: 20),
@@ -92,7 +80,6 @@ class HomeScreen extends StatelessWidget {
                       final pet = pets[index];
                       final petName = pet['name'];
                       final petType = pet['type'];
-                      final petId = pet.id;
 
                       return ListTile(
                         title: Text(petName),
@@ -100,8 +87,8 @@ class HomeScreen extends StatelessWidget {
                         onTap: () {
                           Navigator.pushNamed(
                             context,
-                            '/petDetail',
-                            arguments: petId, 
+                            '/illnessSymptoms',
+                            arguments: petType, 
                           );
                         },
                       );
