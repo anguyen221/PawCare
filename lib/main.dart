@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       onGenerateRoute: (settings) {
         if (settings.name == '/illnessSymptoms') {
-          final petType = settings.arguments as String;
+          final petType = settings.arguments as String?;
           return MaterialPageRoute(
             builder: (context) => IllnessScreen(petType: petType),
           );
@@ -47,10 +47,6 @@ class MyApp extends StatelessWidget {
 
   Widget _getInitialScreen() {
     final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      return HomeScreen();
-    } else {
-      return LoginScreen();
-    }
+    return user != null ? HomeScreen() : LoginScreen();
   }
 }
