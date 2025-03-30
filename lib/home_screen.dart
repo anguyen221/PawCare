@@ -1,8 +1,6 @@
-// ignore_for_file: use_build_context_synchronously
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -23,7 +21,7 @@ class HomeScreen extends StatelessWidget {
               style: TextStyle(fontSize: 24),
             ),
             SizedBox(height: 20),
-            
+
             ElevatedButton(
               onPressed: () async {
                 await FirebaseAuth.instance.signOut();
@@ -31,7 +29,7 @@ class HomeScreen extends StatelessWidget {
               },
               child: Text('Log Out'),
             ),
-            
+
             SizedBox(height: 20),
 
             ElevatedButton(
@@ -40,7 +38,7 @@ class HomeScreen extends StatelessWidget {
               },
               child: Text('Add Pet'),
             ),
-            
+
             SizedBox(height: 20),
 
             ElevatedButton(
@@ -80,6 +78,7 @@ class HomeScreen extends StatelessWidget {
                       final pet = pets[index];
                       final petName = pet['name'];
                       final petType = pet['type'];
+                      final petId = pet.id;
 
                       return ListTile(
                         title: Text(petName),
@@ -87,8 +86,8 @@ class HomeScreen extends StatelessWidget {
                         onTap: () {
                           Navigator.pushNamed(
                             context,
-                            '/illnessSymptoms',
-                            arguments: petType, 
+                            '/petDetail',
+                            arguments: petId,
                           );
                         },
                       );
