@@ -126,7 +126,7 @@ class _UpdateFeedingScheduleScreenState extends State<UpdateFeedingScheduleScree
               ElevatedButton(
                 onPressed: _addFeedingTime,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.pink.shade300,
+                  backgroundColor: Colors.pink.shade100,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -137,7 +137,7 @@ class _UpdateFeedingScheduleScreenState extends State<UpdateFeedingScheduleScree
               ElevatedButton(
                 onPressed: _updateFeedingSchedule,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green.shade400,
+                  backgroundColor: Colors.grey.shade300,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),

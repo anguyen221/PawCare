@@ -59,7 +59,21 @@ class _RemindersScreenState extends State<RemindersScreen> {
         'time': _selectedTime!.format(context),
         'createdAt': FieldValue.serverTimestamp(),
       });
+      setState(() {});
       Navigator.pop(context);
+    }
+  }
+
+  Future<void> _deleteReminder(String reminderId) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('reminders')
+          .doc(reminderId)
+          .delete();
+      setState(() {});
     }
   }
 
@@ -68,14 +82,22 @@ class _RemindersScreenState extends State<RemindersScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Set a Reminder', style: TextStyle(fontFamily: 'Fredoka')),
-        backgroundColor: Colors.pink.shade200,
+        backgroundColor: Colors.pink.shade100,
       ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.pink.shade50, Colors.purple.shade50],
+            colors: [Colors.pink.shade100, Colors.grey.shade300],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
+          ),
+          image: DecorationImage(
+            image: AssetImage('assets/paw_prints.jpg'),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+              Colors.white.withOpacity(0.2),
+              BlendMode.dstATop,
+            ),
           ),
         ),
         child: Padding(
@@ -94,7 +116,7 @@ class _RemindersScreenState extends State<RemindersScreen> {
                 onPressed: _pickDate,
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  backgroundColor: Colors.pink.shade300,
+                  backgroundColor: Colors.pink.shade100,
                 ),
                 child: Text('📅 Select Date'),
               ),
@@ -107,7 +129,7 @@ class _RemindersScreenState extends State<RemindersScreen> {
                 onPressed: _pickTime,
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  backgroundColor: Colors.purple.shade300,
+                  backgroundColor: Colors.pink.shade100,
                 ),
                 child: Text('⏰ Select Time'),
               ),
@@ -120,9 +142,56 @@ class _RemindersScreenState extends State<RemindersScreen> {
                 onPressed: _saveReminder,
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  backgroundColor: Colors.blue.shade300,
+                  backgroundColor: Colors.pink.shade100,
                 ),
                 child: Text('✅ Save Reminder'),
+              ),
+              SizedBox(height: 20),
+              Expanded(
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(FirebaseAuth.instance.currentUser?.uid)
+                      .collection('reminders')
+                      .orderBy('createdAt', descending: true)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+
+                    final reminders = snapshot.data!.docs;
+
+                    return ListView.builder(
+                      itemCount: reminders.length,
+                      itemBuilder: (context, index) {
+                        final reminder = reminders[index];
+                        final reminderId = reminder.id;
+                        final reminderText = reminder['text'];
+                        final reminderDate = DateTime.parse(reminder['date']);
+                        final reminderTime = reminder['time'];
+
+                        return Card(
+                          color: Colors.pink.shade50,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: ListTile(
+                            title: Text(reminderText, style: TextStyle(fontFamily: 'Fredoka')),
+                            subtitle: Text(
+                              '${reminderDate.toLocal().toString().split(' ')[0]} at $reminderTime',
+                              style: TextStyle(fontFamily: 'Fredoka'),
+                            ),
+                            trailing: IconButton(
+                              icon: Icon(Icons.delete, color: Colors.pink),
+                              onPressed: () => _deleteReminder(reminderId),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
               ),
             ],
           ),
