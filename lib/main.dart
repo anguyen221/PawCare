@@ -6,6 +6,7 @@ import 'home_screen.dart';
 import 'add_pet_screen.dart';
 import 'pet_details_screen.dart';
 import 'illness_screen.dart';
+import 'reminders_screen.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => HomeScreen(),
         '/addPet': (context) => AddPetScreen(),
         '/petDetail': (context) => PetDetailScreen(),
+        '/reminders': (context) => RemindersScreen(),
       },
     );
   }
