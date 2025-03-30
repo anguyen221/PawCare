@@ -10,13 +10,35 @@ class CareTipsScreen extends StatelessWidget {
     String careTips = _getCareTipsForPetType(petType);
 
     return Scaffold(
-      appBar: AppBar(title: Text('$petType Care Tips')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Text(
-            careTips,
-            style: TextStyle(fontSize: 16),
+      appBar: AppBar(
+        title: Text('$petType Care Tips', style: TextStyle(fontFamily: 'Fredoka')),
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.pink.shade100, Colors.grey.shade300],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          image: DecorationImage(
+            image: AssetImage('assets/paw_prints.jpg'),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+              Colors.white.withOpacity(0.2),
+              BlendMode.dstATop,
+            ),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SingleChildScrollView(
+            child: Text(
+              careTips,
+              style: TextStyle(
+                fontSize: 16,
+                fontFamily: 'Fredoka',
+              ),
+            ),
           ),
         ),
       ),
