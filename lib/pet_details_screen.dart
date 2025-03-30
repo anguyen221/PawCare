@@ -15,85 +15,101 @@ class PetDetailScreen extends StatelessWidget {
     final userId = FirebaseAuth.instance.currentUser?.uid;
 
     return Scaffold(
-      appBar: AppBar(title: Text('Pet Details')),
-      body: FutureBuilder<DocumentSnapshot>(
-        future: FirebaseFirestore.instance
-            .collection('users')
-            .doc(userId)
-            .collection('pets')
-            .doc(petId)
-            .get(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
-
-          if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
-
-          if (!snapshot.hasData || !snapshot.data!.exists) {
-            return Center(child: Text('Pet not found'));
-          }
-
-          final petData = snapshot.data!;
-          final petName = petData['name'];
-          final petType = petData['type'];
-          final petFeedingSchedule = List<String>.from(petData['feedingSchedule'] ?? []);
-
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Pet Name: $petName',
-                  style: TextStyle(fontSize: 24),
-                ),
-                SizedBox(height: 8),
-                Text(
-                  'Pet Type: $petType',
-                  style: TextStyle(fontSize: 20),
-                ),
-                SizedBox(height: 20),
-                Text(
-                  'Feeding Schedule:',
-                  style: TextStyle(fontSize: 18),
-                ),
-                ...petFeedingSchedule.map((time) {
-                  return Text(
-                    time,
-                    style: TextStyle(fontSize: 16),
-                  );
-                }),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => UpdateFeedingScheduleScreen(petId: petId),
-                      ),
-                    );
-                  },
-                  child: Text('Update Feeding Schedule'),
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CareTipsScreen(petType: petType),
-                      ),
-                    );
-                  },
-                  child: Text('View Care Tips'),
-                ),
-              ],
+      appBar: AppBar(
+        title: Text('🐾 Pet Details', style: TextStyle(fontFamily: 'Fredoka')),
+        backgroundColor: Colors.pink.shade100,
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.pink.shade100, Colors.grey.shade200],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          image: DecorationImage(
+            image: AssetImage('assets/paw_prints.jpg'),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+              Colors.white.withOpacity(0.2),
+              BlendMode.dstATop,
             ),
-          );
-        },
+          ),
+        ),
+        child: FutureBuilder<DocumentSnapshot>(
+          future: FirebaseFirestore.instance
+              .collection('users')
+              .doc(userId)
+              .collection('pets')
+              .doc(petId)
+              .get(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
+
+            if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}', style: TextStyle(fontFamily: 'Fredoka')));
+            }
+
+            if (!snapshot.hasData || !snapshot.data!.exists) {
+              return Center(child: Text('Pet not found', style: TextStyle(fontFamily: 'Fredoka')));
+            }
+
+            final petData = snapshot.data!;
+            final petName = petData['name'];
+            final petType = petData['type'];
+            final petFeedingSchedule = List<String>.from(petData['feedingSchedule'] ?? []);
+
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('🐶 Name: $petName', style: TextStyle(fontSize: 24, fontFamily: 'Fredoka')),
+                  SizedBox(height: 8),
+                  Text('📌 Type: $petType', style: TextStyle(fontSize: 20, fontFamily: 'Fredoka')),
+                  SizedBox(height: 20),
+                  Text('🍽 Feeding Schedule:', style: TextStyle(fontSize: 18, fontFamily: 'Fredoka', fontWeight: FontWeight.bold)),
+                  ...petFeedingSchedule.map((time) {
+                    return Text('⏰ $time', style: TextStyle(fontSize: 16, fontFamily: 'Fredoka'));
+                  }),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UpdateFeedingScheduleScreen(petId: petId),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      backgroundColor: Colors.grey.shade200,
+                    ),
+                    child: Text('📝 Update Feeding Schedule', style: TextStyle(fontFamily: 'Fredoka')),
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CareTipsScreen(petType: petType),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      backgroundColor: Colors.pink.shade100,
+                    ),
+                    child: Text('📖 View Care Tips', style: TextStyle(fontFamily: 'Fredoka')),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
