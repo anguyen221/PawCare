@@ -8,3 +8,7 @@ PawCare is a Flutter-based mobile app designed to help pet owners manage and car
 - **Care Tips**: Get helpful care tips tailored to your pet's species, ensuring you always have the right information at your fingertips.
 - **Illness Symptoms Tracker**: Select your pet type from a dropdown menu and view relevant illness symptoms for quick reference and peace of mind.
 - **Reminders**: Add custom reminders with date & time to ensure important tasks like feeding, vet visits, or medication administration are not forgotten. These reminders are also displayed on the home screen.
+
+## Presentation Link
+
+- Placeholder for now
