@@ -12,8 +12,11 @@ class CareTipsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('$petType Care Tips', style: TextStyle(fontFamily: 'Fredoka')),
+        backgroundColor: Colors.pink.shade100,
       ),
       body: Container(
+        width: double.infinity,
+        height: double.infinity,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [Colors.pink.shade100, Colors.grey.shade300],

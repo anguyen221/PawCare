@@ -20,6 +20,8 @@ class PetDetailScreen extends StatelessWidget {
         backgroundColor: Colors.pink.shade100,
       ),
       body: Container(
+        width: double.infinity,
+        height: double.infinity,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [Colors.pink.shade100, Colors.grey.shade200],
@@ -48,64 +50,85 @@ class PetDetailScreen extends StatelessWidget {
             }
 
             if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}', style: TextStyle(fontFamily: 'Fredoka')));
+              return Center(
+                  child: Text('Error: ${snapshot.error}',
+                      style: TextStyle(fontFamily: 'Fredoka')));
             }
 
             if (!snapshot.hasData || !snapshot.data!.exists) {
-              return Center(child: Text('Pet not found', style: TextStyle(fontFamily: 'Fredoka')));
+              return Center(
+                  child: Text('Pet not found',
+                      style: TextStyle(fontFamily: 'Fredoka')));
             }
 
             final petData = snapshot.data!;
             final petName = petData['name'];
             final petType = petData['type'];
-            final petFeedingSchedule = List<String>.from(petData['feedingSchedule'] ?? []);
+            final petFeedingSchedule =
+                List<String>.from(petData['feedingSchedule'] ?? []);
 
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('🐶 Name: $petName', style: TextStyle(fontSize: 24, fontFamily: 'Fredoka')),
-                  SizedBox(height: 8),
-                  Text('📌 Type: $petType', style: TextStyle(fontSize: 20, fontFamily: 'Fredoka')),
-                  SizedBox(height: 20),
-                  Text('🍽 Feeding Schedule:', style: TextStyle(fontSize: 18, fontFamily: 'Fredoka', fontWeight: FontWeight.bold)),
-                  ...petFeedingSchedule.map((time) {
-                    return Text('⏰ $time', style: TextStyle(fontSize: 16, fontFamily: 'Fredoka'));
-                  }),
-                  SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => UpdateFeedingScheduleScreen(petId: petId),
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      backgroundColor: Colors.grey.shade200,
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text('🐶 Name: $petName',
+                        style: TextStyle(fontSize: 24, fontFamily: 'Fredoka')),
+                    SizedBox(height: 8),
+                    Text('📌 Type: $petType',
+                        style: TextStyle(fontSize: 20, fontFamily: 'Fredoka')),
+                    SizedBox(height: 20),
+                    Text('🍽 Feeding Schedule:',
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'Fredoka',
+                            fontWeight: FontWeight.bold)),
+                    ...petFeedingSchedule.map((time) {
+                      return Text('⏰ $time',
+                          style:
+                              TextStyle(fontSize: 16, fontFamily: 'Fredoka'));
+                    }),
+                    SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                UpdateFeedingScheduleScreen(petId: petId),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                        backgroundColor: Colors.grey.shade200,
+                      ),
+                      child: Text('📝 Update Feeding Schedule',
+                          style: TextStyle(fontFamily: 'Fredoka')),
                     ),
-                    child: Text('📝 Update Feeding Schedule', style: TextStyle(fontFamily: 'Fredoka')),
-                  ),
-                  SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CareTipsScreen(petType: petType),
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      backgroundColor: Colors.pink.shade100,
+                    SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                CareTipsScreen(petType: petType),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                        backgroundColor: Colors.pink.shade100,
+                      ),
+                      child: Text('📖 View Care Tips',
+                          style: TextStyle(fontFamily: 'Fredoka')),
                     ),
-                    child: Text('📖 View Care Tips', style: TextStyle(fontFamily: 'Fredoka')),
-                  ),
-                ],
+                  ],
+                ),
               ),
             );
           },
