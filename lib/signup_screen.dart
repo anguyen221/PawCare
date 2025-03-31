@@ -24,7 +24,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
     return null;
   }
-  
+
   String? _validatePassword(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter a password';
@@ -41,7 +41,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           email: _emailController.text,
           password: _passwordController.text,
         );
-        
+
         String userId = userCredential.user!.uid;
         await FirebaseFirestore.instance.collection('users').doc(userId).set({
           'email': _emailController.text,
@@ -51,7 +51,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         Navigator.pushReplacementNamed(context, '/home');
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Sign-up failed: $e')),
+          const SnackBar(content: Text('Sign-up failed')),
         );
       }
     }
@@ -60,30 +60,85 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Create Account')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                controller: _emailController,
-                decoration: InputDecoration(labelText: 'Email'),
-                validator: _validateEmail,
-              ),
-              TextFormField(
-                controller: _passwordController,
-                obscureText: true,
-                decoration: InputDecoration(labelText: 'Password'),
-                validator: _validatePassword,
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _signUp,
-                child: Text('Sign Up'),
-              ),
-            ],
+      appBar: AppBar(
+        title: const Text(
+          'Create Account',
+          style: TextStyle(fontFamily: 'Fredoka'),
+        ),
+        backgroundColor: Colors.pink.shade100,
+      ),
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.pink.shade100, Colors.grey.shade300],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          image: DecorationImage(
+            image: const AssetImage('assets/paw_prints.jpg'),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+              Colors.white.withAlpha(51),
+              BlendMode.dstATop,
+            ),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextFormField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    labelStyle: const TextStyle(fontFamily: 'Fredoka'),
+                    filled: true,
+                    fillColor: Colors.white.withAlpha(204),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
+                  validator: _validateEmail,
+                ),
+                const SizedBox(height: 10),
+                TextFormField(
+                  controller: _passwordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    labelStyle: const TextStyle(fontFamily: 'Fredoka'),
+                    filled: true,
+                    fillColor: Colors.white.withAlpha(204),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
+                  validator: _validatePassword,
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: _signUp,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.pink.shade200,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
+                  child: const Text(
+                    'Sign Up',
+                    style: TextStyle(fontFamily: 'Fredoka', color: Colors.white),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    'Back to Login',
+                    style: TextStyle(fontFamily: 'Fredoka', color: Colors.black),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
