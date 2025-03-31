@@ -1,16 +1,10 @@
-# pet_care_app
+PawCare is a Flutter-based mobile app designed to help pet owners manage and care for their pets. With features like pet care tips, illness symptom tracking, and custom reminders, PawCare ensures your pet receives the best possible care and attention.
 
-A new Flutter project.
+## Features
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- **Firebase Integration**: The app integrates Firebase for authentication, allowing users to sign up and log in securely.
+- **Pet Profile**: Create and manage detailed profiles for each of your pets, including name, type, and feeding schedule.
+- **Feeding Schedule**: Easily update and view your pet’s feeding schedule.
+- **Care Tips**: Get helpful care tips tailored to your pet's species, ensuring you always have the right information at your fingertips.
+- **Illness Symptoms Tracker**: Select your pet type from a dropdown menu and view relevant illness symptoms for quick reference and peace of mind.
+- **Reminders**: Add custom reminders with date & time to ensure important tasks like feeding, vet visits, or medication administration are not forgotten. These reminders are also displayed on the home screen.
